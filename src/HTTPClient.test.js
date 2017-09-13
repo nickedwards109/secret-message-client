@@ -7,7 +7,7 @@ describe('HTTPClient', () => {
     const cipher = new Cipher(password);
     const httpClient = new HTTPClient(cipher);
     const httpMethod = 'GET';
-    const url = '/fake/example.json';
+    const url = 'https://secret-message-server.herokuapp.com/api/v1/secret_messages/1.json';
     const httpVersion = '1.1';
     const xhr = new XMLHttpRequest();
     const xhrAndSignature = httpClient.sign_request(xhr, httpMethod, url, httpVersion);
@@ -46,7 +46,7 @@ describe('HTTPClient', () => {
     // You can manually verify that the Authorization header is being set by
     //   uncommenting the following line and visually observing that the
     //   Authorization header exists and has a long string as its value.
-      // console.log(signed_xhr);
+    // console.log(signed_xhr);
 
     console.log('Want to test more thoroughly that the Authorization header is being set? Uncomment the console.log() above and look for an Authorization header with a long string as its value.')
 
@@ -55,8 +55,8 @@ describe('HTTPClient', () => {
     //  Authorization header, as per the comments above.
     const signature = xhrAndSignature.signature;
     expect(typeof signature).toEqual('string');
-    expect(signature.length).toEqual(64);
-    expect(signature).toEqual('27d040bf07b2ff457e896e1973f9a952c220b3160943244ec90be80e848e3d90');
+    expect(signature.length).toEqual(192);
+    expect(signature).toEqual('73c9f540c5f00bc56f07b6ba5f2e1e34b5b937ed4db731a4500424458cf6a72d18ec0ad61b12a7f24f181f7815c69166ee94dfc6fa4cb5871b0d086ee7e31fccf3f720de99f9f5fb06eb770c61bde6e905eaf9f6f93548eb33c1eb7463901684');
 
     // Test that the signature is indeed the encrypted HTTP request line
     const decrypted_signature = cipher.decrypt(signature);
