@@ -1,12 +1,14 @@
 import Cipher from './Cipher';
 
 class HTTPClient {
-  sign_request(xhr, method, url) {
-    const cipher = new Cipher();
-    const HTTP_version = '1.1';
+  constructor(cipher) {
+    this.cipher = cipher;
+  }
+
+  sign_request(xhr, method, url, httpVersion) {
     const upcase_HTTP_method = method.toUpperCase();
-    const request_line = upcase_HTTP_method + ' ' + url + ' ' + HTTP_version;
-    const signature = cipher.encrypt(request_line);
+    const request_line = upcase_HTTP_method + ' ' + url + ' ' + httpVersion;
+    const signature = this.cipher.encrypt(request_line);
 
     xhr.open(method, url);
 
