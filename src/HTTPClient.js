@@ -40,6 +40,10 @@ class HTTPClient {
     const results = { xhr: xhr, signature: signature, initialization_vector: initialization_vector };
     return results;
   }
+
+  send_request(xhr) {
+    xhr.send();
+  }
 }
 
 export default HTTPClient;
