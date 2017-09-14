@@ -9,6 +9,7 @@ class HTTPClient {
     const upcase_HTTP_method = method.toUpperCase();
     const request_line = upcase_HTTP_method + ' ' + url + ' ' + httpVersion;
     const signature = this.cipher.encrypt(request_line);
+    const initialization_vector = String(this.cipher.initialization_vector);
     xhr.open(method, url);
 
     // This comment is duplicated in the unit test for this method.
@@ -18,22 +19,25 @@ class HTTPClient {
     //   headers, but no methods for getting request headers:
     //   https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
     // I'd still like to test that the signature is being generated, but I can't
-    //   directly get the value of the Authorization header from the XHR object.
+    //   directly get the values of headers from the XHR object.
     // So, I'm going to return an object from this method that contains both the
-    //   XHR object itself as well as the signature. This will make it possible
-    //   to unit test that the signature is being generated. BUT, we are still
-    //   not testing that the signature was set as a header in the request.
-    // You can manually verify that the Authorization header is being set by
-    //   uncommenting the following line and visually observing that the
-    //   Authorization header exists and has a long string as its value.
-    //   console.log(xhr);
+    //   XHR object itself as well as the signature and initialization vector.
+    //   This will make it possible to unit test that the signature and
+    //   initialization vector are in scope. BUT, we are still
+    //   not testing that these values were set in request headers.
 
     // This all means that the following line of code must not be deleted!
-    // If you delete this line of code, the tests will still pass, but you will
-    //   be sending unsigned requests. DO NOT DELETE xhr.setRequestHeader()!!!
+    // If you delete these two lines of code, the tests will still pass, but you
+    //   will be sending unsigned requests.
     xhr.setRequestHeader('Authorization', signature);
+    xhr.setRequestHeader('IV', initialization_vector);
 
-    const results = { xhr: xhr, signature: signature };
+    // You can manually verify that the Authorization and IV headers are being
+    //   set by uncommenting the following line and visually observing that the
+    //   Authorization and IV headers exist and have strings as their values.
+    // console.log(xhr);
+
+    const results = { xhr: xhr, signature: signature, initialization_vector: initialization_vector };
     return results;
   }
 }
