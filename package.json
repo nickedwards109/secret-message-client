@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bcrypt": "^1.0.3",
+    "detect-character-encoding": "^0.5.1",
     "keypair": "^1.0.1",
     "node-rsa": "^0.4.2",
     "react": "^15.6.1",

@@ -1,10 +1,11 @@
 import HTTPClient from './HTTPClient';
 import Cipher from './Cipher';
+import crypto from 'crypto';
 
 describe('HTTPClient', () => {
   it('signs the request', () => {
-    const password = 'ff5c66433974329a675b114f27799251821c6830f0aa69cbb62cfcce6c6cd20f864494873c0e513a2033f650f357ef2cc9818b6541bf5625d3a4ee374e254b1e';
-    const cipher = new Cipher(password);
+    const key = require('./secrets').key;
+    const cipher = new Cipher(key);
     const httpClient = new HTTPClient(cipher);
     const httpMethod = 'GET';
     const url = 'https://secret-message-server.herokuapp.com/api/v1/secret_messages/1.json';
@@ -55,8 +56,6 @@ describe('HTTPClient', () => {
     //  Authorization header, as per the comments above.
     const signature = xhrAndSignature.signature;
     expect(typeof signature).toEqual('string');
-    expect(signature.length).toEqual(192);
-    expect(signature).toEqual('73c9f540c5f00bc56f07b6ba5f2e1e34b5b937ed4db731a4500424458cf6a72d18ec0ad61b12a7f24f181f7815c69166ee94dfc6fa4cb5871b0d086ee7e31fcc1080c79a217d61bcd05e67df8c15990b70e8aeae8a9c7e5c90da0517efbbae90');
 
     // Test that the signature is indeed the encrypted HTTP request line
     const decrypted_signature = cipher.decrypt(signature);

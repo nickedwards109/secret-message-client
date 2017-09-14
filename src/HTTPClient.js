@@ -9,7 +9,6 @@ class HTTPClient {
     const upcase_HTTP_method = method.toUpperCase();
     const request_line = upcase_HTTP_method + ' ' + url + ' ' + httpVersion;
     const signature = this.cipher.encrypt(request_line);
-
     xhr.open(method, url);
 
     // This comment is duplicated in the unit test for this method.
