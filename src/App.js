@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import HTTPClient from './HTTPClient';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { message: '' };
+    this.getMessage = this.getMessage.bind(this);
+  }
+
+  getMessage() {
+    const httpClient = new HTTPClient();
+    const response = httpClient.getMessage().then(response => {
+      this.setState({ message: response.data.description });
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <button onClick={this.getMessage}>Get a Secret Message</button>
+        <p>{this.state.message}</p>
       </div>
     );
   }

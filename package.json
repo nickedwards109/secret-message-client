@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.16.2",
     "bcrypt": "^1.0.3",
     "detect-character-encoding": "^0.5.1",
     "keypair": "^1.0.1",
