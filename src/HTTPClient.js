@@ -4,11 +4,9 @@ import axios from 'axios';
 class HTTPClient {
   getMessage() {
     const httpMethod = 'GET';
-    // This is a placeholder API endpoint from a former project.
-    // This endpoint does not authenticate the request.
-    // Soon I'll replace this with an endpoint that checks the Authorization
-    //  header to authenticate the request.
-    const url = 'https://cody-nick-rails-engine.herokuapp.com/api/v1/items/random.json';
+    // Use localhost for development
+    // Later, this will be replaced with a production endpoint
+    const url = 'http://localhost:3000/api/v1/secret_messages/1';
     const httpVersion = 'HTTP/1.1';
     const key = require('./secrets').key;
     const signature = this.generateSignature(httpMethod, url, httpVersion, key);
