@@ -11,9 +11,15 @@ class App extends Component {
 
   getMessage() {
     const httpClient = new HTTPClient();
-    const response = httpClient.getMessage().then(response => {
-      this.setState({ message: response.data.description });
-    });
+    httpClient.getMessage().then(
+      resolved_response => {
+        this.setState({ message: resolved_response.data.description });
+      },
+      reject => {
+        const error_message = "There was an error! Something something 404 lulz. Nice try!"
+        this.setState({ message: error_message });
+      }
+    );
   }
 
   render() {
