@@ -12,8 +12,9 @@ class App extends Component {
   getMessage() {
     const httpClient = new HTTPClient();
     httpClient.getMessage().then(
-      resolved_response => {
-        this.setState({ message: resolved_response.data.message });
+      resolve => {
+        const message = httpClient.decryptHTTP(resolve);
+        this.setState({ message: message });
       },
       reject => {
         const error_message = "There was an error! Something something 404 lulz. Nice try!"
