@@ -1,4 +1,6 @@
 import HTTPClient from './HTTPClient';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 describe('HTTPClient', () => {
   it('generates a digital signature from the HTTP request line', () => {
@@ -15,13 +17,21 @@ describe('HTTPClient', () => {
     expect(signature).toEqual(expected_signature);
   });
 
-  it('gets data from an API endpoint', () => {
-    console.log('I have not yet figured out how to test the AJAX call.');
-    console.log("To manually test this:");
-    console.log("Run 'npm start'");
-    console.log('Visit http://localhost:3000');
-    console.log('Click on the button which prompts to get a message');
-    console.log('Verify that data shows up in the browser.');
-    console.log('Please, forgive me!');
+  it('decrypts a cipher from an API response', () => {
+    const cipher = '3d572c2020a2b8bd7975a89cc363047bd6b06eb5abcd116485f1dc2f37e4954e7c0fd9fe97df94d3f463b99ab213efe5';
+    const initialization_vector = 'c333cbcfc5a6aad5';
+    const mockServer = new MockAdapter(axios);
+    mockServer.onGet('http://localhost:3000/api/v1/secret_messages/1').reply(
+      200,
+      {'message':cipher},
+      {'initialization_vector':initialization_vector}
+    )
+
+    axios.get('http://localhost:3000/api/v1/secret_messages/1')
+      .then((response) => {
+        const httpClient = new HTTPClient();
+        const decrypted = httpClient.decryptHTTP(response);
+        expect(decrypted).toEqual("There's always money in the banana stand.");
+      });
   });
 });
