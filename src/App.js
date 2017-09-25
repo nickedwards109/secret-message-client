@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
 import HTTPClient from './HTTPClient';
+import Messages from './Messages';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { message: '' };
-    this.getMessage = this.getMessage.bind(this);
+    this.state = { messages: [] };
+    this.getMessages = this.getMessages.bind(this);
   }
 
-  getMessage() {
+  getMessages() {
     const httpClient = new HTTPClient();
-    httpClient.getMessage().then(
+    httpClient.getMessages().then(
       resolve => {
-        const message = httpClient.decryptHTTP(resolve);
-        this.setState({ message: message });
+        const messages = httpClient.decryptHTTP(resolve);
+        this.setState({ messages: messages });
       },
       reject => {
         const error_message = "There was an error! Something something 404 lulz. Nice try!"
-        this.setState({ message: error_message });
+        this.setState({ messages: [error_message] });
       }
     );
   }
@@ -26,8 +27,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <button onClick={this.getMessage}>Get a Secret Message</button>
-        <p>{this.state.message}</p>
+        <button onClick={this.getMessages}>Get Secret Messages</button>
+        <Messages messages={this.state.messages}/>
       </div>
     );
   }

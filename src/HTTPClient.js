@@ -4,11 +4,11 @@ import Cipher from './Cipher';
 const key = require('./secrets').key
 
 class HTTPClient {
-  getMessage() {
+  getMessages() {
     const httpMethod = 'GET';
     // Use localhost for development
     // Later, this will be replaced with a production endpoint
-    const url = 'http://localhost:3000/api/v1/secret_messages/1';
+    const url = 'http://localhost:3000/api/v1/secret_messages';
     const httpVersion = 'HTTP/1.1';
     const signature = this.generateSignature(httpMethod, url, httpVersion, key);
     const axiosInstance = axios.create({
