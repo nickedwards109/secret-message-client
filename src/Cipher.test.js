@@ -1,5 +1,16 @@
 import Cipher from './Cipher';
 
+// !!! IMPORTANT !!!
+// In order for these tests to work, you need to make a file src/secrets.js
+//  with the following code:
+//
+// var crypto = require('crypto');
+// var random_string = crypto.randomBytes(8).toString('hex');
+// export const initialization_vector = Buffer.from(random_string);
+//
+// This sets up a random initialization vector that is used by default when a
+//  Cipher is created without explicitly passing an IV into the constructor.
+
 describe('Cipher', () => {
 	it('encrypts and decrypts text', () => {
 		const cipher = new Cipher();

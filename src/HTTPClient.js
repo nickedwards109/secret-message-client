@@ -31,8 +31,6 @@ class HTTPClient {
     const decrypted_output = response.data.messages.map((element) => {
       const encrypted = element.message;
       const initialization_vector = element.initialization_vector;
-      // console.log(encrypted);
-      // console.log(initialization_vector);
       const cipher = new Cipher(key, initialization_vector);
       const decrypted = cipher.decrypt(encrypted)
       return decrypted;
