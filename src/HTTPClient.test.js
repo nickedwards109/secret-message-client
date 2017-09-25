@@ -2,6 +2,14 @@ import HTTPClient from './HTTPClient';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 
+// !!! IMPORTANT !!!
+// In order for these tests to work, you need to make a file src/secrets.js
+//  with the following line:
+//  export const key = '1416fd3c3f607646eb2716140a37cc69';
+//
+// These tests are coupled to this key. This key will not give you access to
+//  the production server, but it will get the tests to pass.
+
 describe('HTTPClient', () => {
   it('generates a digital signature from the HTTP request line', () => {
     const httpMethod = 'GET';
@@ -37,10 +45,10 @@ describe('HTTPClient', () => {
   });
 
   it('decrypts multiple ciphers from an API response', () => {
-    const cipher1 = 'f749626e5faaf2a68baabe099ec2fc9925af37d02921edb324c477b57ae20d420ee57c2df6d334350b39cffc537d2544';
-    const initialization_vector1 = '6a6bd9cd16b693dd';
-    const cipher2 = 'b0f1581b9fc1e941aa13d8366d6509b0c1bc3ec4e01f9890eb42ed5b7c98391c'
-    const initialization_vector2 = 'e3f4db4ebbf9e6c5'
+    const cipher1 = '0598ec2218dff43626fe528178b14cfeccaa7854e78dc8e44acac0c799b74c11305352a19b58ee75006b4a942bd0cbfe';
+    const initialization_vector1 = '253cb671289455a2';
+    const cipher2 = 'e6476f2aa8c43a74d3f828e319b08710ddbc7de192e8e9bc07f8c079ee3d2597';
+    const initialization_vector2 = 'e7a86a4ebb349660';
     const mockServer = new MockAdapter(axios);
 
     mockServer.onGet('http://localhost:3000/api/v1/secret_messages').reply(

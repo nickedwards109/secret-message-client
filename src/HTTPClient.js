@@ -28,11 +28,16 @@ class HTTPClient {
   }
 
   decryptHTTP(response) {
-    const initialization_vector = response.data.initialization_vector;
-    const encrypted = response.data.message;
-    const cipher = new Cipher(key, initialization_vector);
-    const decrypted = cipher.decrypt(encrypted)
-    return decrypted;
+    const decrypted_output = response.data.messages.map((element) => {
+      const encrypted = element.message;
+      const initialization_vector = element.initialization_vector;
+      // console.log(encrypted);
+      // console.log(initialization_vector);
+      const cipher = new Cipher(key, initialization_vector);
+      const decrypted = cipher.decrypt(encrypted)
+      return decrypted;
+    });
+    return decrypted_output;
   }
 }
 
