@@ -23,8 +23,7 @@ describe('HTTPClient', () => {
     const mockServer = new MockAdapter(axios);
     mockServer.onGet('http://localhost:3000/api/v1/secret_messages/1').reply(
       200,
-      {'message':cipher},
-      {'initialization_vector':initialization_vector}
+      {'message':cipher, 'initialization_vector':initialization_vector},
     )
 
     axios.get('http://localhost:3000/api/v1/secret_messages/1')

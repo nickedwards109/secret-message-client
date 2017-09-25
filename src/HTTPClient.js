@@ -28,9 +28,9 @@ class HTTPClient {
   }
 
   decryptHTTP(response) {
-    const initialization_vector = response.headers.initialization_vector;
-    const cipher = new Cipher(key, initialization_vector);
+    const initialization_vector = response.data.initialization_vector;
     const encrypted = response.data.message;
+    const cipher = new Cipher(key, initialization_vector);
     const decrypted = cipher.decrypt(encrypted)
     return decrypted;
   }
