@@ -23,7 +23,9 @@ describe('HTTPClient', () => {
     const mockServer = new MockAdapter(axios);
     mockServer.onGet('http://localhost:3000/api/v1/secret_messages/1').reply(
       200,
-      {'message':cipher, 'initialization_vector':initialization_vector},
+      {'messages':[
+        {'message':cipher, 'initialization_vector':initialization_vector}
+      ]},
     );
 
     axios.get('http://localhost:3000/api/v1/secret_messages/1')
@@ -32,8 +34,6 @@ describe('HTTPClient', () => {
         const decrypted = httpClient.decryptHTTP(response);
         expect(decrypted).toEqual(["There's always money in the banana stand."]);
       });
-
-    mockServer.reset();
   });
 
   it('decrypts multiple ciphers from an API response', () => {
@@ -45,10 +45,11 @@ describe('HTTPClient', () => {
 
     mockServer.onGet('http://localhost:3000/api/v1/secret_messages').reply(
       200,
-      {
-        '1':{'message':cipher1, 'initialization_vector':initialization_vector1},
-        '2':{'message':cipher2, 'initialization_vector':initialization_vector2}
-      },
+      {'messages':
+        [
+          {'message':cipher1, 'initialization_vector':initialization_vector1},
+          {'message':cipher2, 'initialization_vector':initialization_vector2}
+      ]},
     );
 
     axios.get('http://localhost:3000/api/v1/secret_messages')
