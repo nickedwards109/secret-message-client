@@ -24,13 +24,41 @@ describe('HTTPClient', () => {
     mockServer.onGet('http://localhost:3000/api/v1/secret_messages/1').reply(
       200,
       {'message':cipher, 'initialization_vector':initialization_vector},
-    )
+    );
 
     axios.get('http://localhost:3000/api/v1/secret_messages/1')
       .then((response) => {
         const httpClient = new HTTPClient();
         const decrypted = httpClient.decryptHTTP(response);
-        expect(decrypted).toEqual("There's always money in the banana stand.");
+        expect(decrypted).toEqual(["There's always money in the banana stand."]);
+      });
+
+    mockServer.reset();
+  });
+
+  it('decrypts multiple ciphers from an API response', () => {
+    const cipher1 = 'f749626e5faaf2a68baabe099ec2fc9925af37d02921edb324c477b57ae20d420ee57c2df6d334350b39cffc537d2544';
+    const initialization_vector1 = '6a6bd9cd16b693dd';
+    const cipher2 = 'b0f1581b9fc1e941aa13d8366d6509b0c1bc3ec4e01f9890eb42ed5b7c98391c'
+    const initialization_vector2 = 'e3f4db4ebbf9e6c5'
+    const mockServer = new MockAdapter(axios);
+
+    mockServer.onGet('http://localhost:3000/api/v1/secret_messages').reply(
+      200,
+      {
+        '1':{'message':cipher1, 'initialization_vector':initialization_vector1},
+        '2':{'message':cipher2, 'initialization_vector':initialization_vector2}
+      },
+    );
+
+    axios.get('http://localhost:3000/api/v1/secret_messages')
+      .then((response) => {
+        const httpClient = new HTTPClient();
+        const decrypted = httpClient.decryptHTTP(response);
+        expect(decrypted).toEqual([
+          "There's always money in the banana stand.",
+          "I've made a huge mistake."
+        ]);
       });
   });
 });
