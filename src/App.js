@@ -11,6 +11,7 @@ class App extends Component {
   }
 
   getMessages() {
+    this.setState({messages: ['Getting messages...']})
     const httpClient = new HTTPClient();
     httpClient.getMessages().then(
       resolve => {
