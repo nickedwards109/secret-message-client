@@ -15,8 +15,13 @@ class App extends Component {
     const httpClient = new HTTPClient();
     httpClient.getMessages().then(
       resolve => {
-        const messages = httpClient.decryptHTTP(resolve);
-        this.setState({ messages: messages });
+        if (httpClient.authenticate(resolve)) {
+          const messages = httpClient.decryptHTTP(resolve);
+          this.setState({ messages: messages });
+        } else {
+          const error_message = "The server responded with an unauthenticated response!"
+          this.setState({ messages: [error_message] });
+        }
       },
       reject => {
         const error_message = "There was an error! Something something 404 lulz. Nice try!"
