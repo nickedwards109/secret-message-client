@@ -37,6 +37,26 @@ class HTTPClient {
     });
     return decrypted_output;
   }
+
+  authenticate(response) {
+    const decrypted_output = this.decryptHTTP(response);
+    const hmac = new Hmac();
+
+    const valid_signatures = decrypted_output.map((element, index) => {
+      return hmac.hash(element);
+    });
+
+    const response_signatures = response.data.messages.map((element) => {
+      return element.signature;
+    });
+
+    const authentications = response_signatures.filter((element, index) => {
+      return element === valid_signatures[index];
+    });
+
+    if (authentications.length === valid_signatures.length) { return true ;}
+    else { return false; }
+  }
 }
 
 export default HTTPClient;
