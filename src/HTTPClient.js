@@ -40,22 +40,31 @@ class HTTPClient {
 
   authenticate(response) {
     const decrypted_output = this.decryptHTTP(response);
-    const hmac = new Hmac();
-
-    const valid_signatures = decrypted_output.map((element, index) => {
-      return hmac.hash(element);
-    });
-
-    const response_signatures = response.data.messages.map((element) => {
-      return element.signature;
-    });
-
-    const authentications = response_signatures.filter((element, index) => {
-      return element === valid_signatures[index];
-    });
+    const valid_signatures = this.generateValidSignatures(decrypted_output);
+    const response_signatures = this.getResponseSignatures(response);
+    const authentications = this.getValidResponseSignatures(valid_signatures, response_signatures)
 
     if (authentications.length === valid_signatures.length) { return true ;}
     else { return false; }
+  }
+
+  generateValidSignatures(messages) {
+    const hmac = new Hmac();
+    return messages.map((message, index) => {
+      return hmac.hash(message);
+    });
+  }
+
+  getResponseSignatures(response) {
+    return response.data.messages.map((element) => {
+      return element.signature;
+    });
+  }
+
+  getValidResponseSignatures(valid_signatures, response_signatures) {
+    return response_signatures.filter((element, index) => {
+      return element === valid_signatures[index];
+    });
   }
 }
 
