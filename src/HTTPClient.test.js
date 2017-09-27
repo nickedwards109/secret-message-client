@@ -70,4 +70,56 @@ describe('HTTPClient', () => {
         ]);
       });
   });
+
+  it('authenticates an HTTP response containing valid signatures', () => {
+    const cipher1 = '0598ec2218dff43626fe528178b14cfeccaa7854e78dc8e44acac0c799b74c11305352a19b58ee75006b4a942bd0cbfe';
+    const initialization_vector1 = '253cb671289455a2';
+    const valid_signature_1 = '945a620b6e0849b0b69b663a1307534f4ca8ad8bfbafe9e1d7130a5a426001be';
+    const cipher2 = 'e6476f2aa8c43a74d3f828e319b08710ddbc7de192e8e9bc07f8c079ee3d2597';
+    const initialization_vector2 = 'e7a86a4ebb349660';
+    const valid_signature_2 = '733d6acfd774e94a341971a0fdd88baf1f97025d3a955c51340d8f860c80808e';
+    const mockServer = new MockAdapter(axios);
+
+    mockServer.onGet('http://localhost:3000/api/v1/secret_messages').reply(
+      200,
+      {'messages':
+        [
+          {'message':cipher1, 'initialization_vector':initialization_vector1, signature: valid_signature_1},
+          {'message':cipher2, 'initialization_vector':initialization_vector2, signature: valid_signature_2}
+      ]},
+    );
+
+    axios.get('http://localhost:3000/api/v1/secret_messages')
+      .then((response) => {
+        const httpClient = new HTTPClient();
+        const authenticated = httpClient.authenticate(response);
+        expect(authenticated).toEqual(true);
+      });
+  });
+
+  it('does not authenticates an HTTP response containing invalid signatures', () => {
+    const cipher1 = '0598ec2218dff43626fe528178b14cfeccaa7854e78dc8e44acac0c799b74c11305352a19b58ee75006b4a942bd0cbfe';
+    const initialization_vector1 = '253cb671289455a2';
+    const invalid_signature_1 = 'invalidsignature';
+    const cipher2 = 'e6476f2aa8c43a74d3f828e319b08710ddbc7de192e8e9bc07f8c079ee3d2597';
+    const initialization_vector2 = 'e7a86a4ebb349660';
+    const invalid_signature_2 = 'invalidsignature';
+    const mockServer = new MockAdapter(axios);
+
+    mockServer.onGet('http://localhost:3000/api/v1/secret_messages').reply(
+      200,
+      {'messages':
+        [
+          {'message':cipher1, 'initialization_vector':initialization_vector1, signature: invalid_signature_1},
+          {'message':cipher2, 'initialization_vector':initialization_vector2, signature: invalid_signature_2}
+      ]},
+    );
+
+    axios.get('http://localhost:3000/api/v1/secret_messages')
+      .then((response) => {
+        const httpClient = new HTTPClient();
+        const authenticated = httpClient.authenticate(response);
+        expect(authenticated).toEqual(false);
+      });
+  });
 });
