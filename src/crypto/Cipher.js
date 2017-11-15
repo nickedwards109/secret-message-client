@@ -2,7 +2,7 @@ const crypto = require('crypto'),
       algorithm = 'aes-256-cbc';
 
 class Cipher {
-  constructor(key = require('./secrets').key, initialization_vector = require('./secrets').initialization_vector) {
+  constructor(key = require('../secrets').key, initialization_vector = require('../secrets').initialization_vector) {
     this.key = key;
     this.initialization_vector = initialization_vector;
   }

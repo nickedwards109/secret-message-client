@@ -1,7 +1,7 @@
-import Hmac from './HMAC';
+import Hmac from '../crypto/HMAC';
 import axios from 'axios';
-import Cipher from './Cipher';
-const key = require('./secrets').key
+import Cipher from '../crypto/Cipher';
+const key = require('../secrets').key
 
 class HTTPClient {
   getMessages() {

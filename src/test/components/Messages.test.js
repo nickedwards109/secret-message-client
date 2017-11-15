@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Messages from './Messages';
+import Messages from '../../components/Messages';
 import { shallow } from 'enzyme';
 
 it('renders without crashing', () => {

@@ -1,4 +1,4 @@
-import Hmac from './HMAC';
+import Hmac from '../../crypto/HMAC';
 
 describe('hmac', () => {
   it('generates a hash from data and a key', () => {

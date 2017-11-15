@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import HTTPClient from './HTTPClient';
+import '../styles/App.css';
+import HTTPClient from '../services/HTTPClient';
 import Messages from './Messages';
 
 class App extends Component {

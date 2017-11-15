@@ -1,4 +1,4 @@
-import HTTPClient from './HTTPClient';
+import HTTPClient from '../../services/HTTPClient';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 

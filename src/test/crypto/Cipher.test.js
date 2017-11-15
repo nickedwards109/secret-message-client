@@ -1,4 +1,4 @@
-import Cipher from './Cipher';
+import Cipher from '../../crypto/Cipher';
 
 // !!! IMPORTANT !!!
 // In order for these tests to work, you need to make a file src/secrets.js
